@@ -1,0 +1,42 @@
+﻿@model EasyGame.ViewModels.ClientTransactionsViewModel
+@{
+    ViewBag.Title = "View All Clients";
+}
+
+<link href="~/Content/sitecss.css" rel="stylesheet" type="text/css" />
+
+<h2>View All Clients</h2>
+
+<p>
+    <a href="@Url.Action("ViewAllClients", new { sortOrder = ViewBag.NameSortParm })">Sort by Name</a> |
+    <a href="@Url.Action("ViewAllClients", new { sortOrder = "balance" })">Sort by Balance</a>
+</p>
+
+@using (Html.BeginForm("ViewAllClients", "Home", FormMethod.Get))
+{
+    <p>
+        Find by name: @Html.TextBox("searchString") <input type="submit" value="Search" />
+    </p>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Balance</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var client in Model.ClientsList)
+        {
+            <tr>
+                <td>@client.Name</td>
+                <td>@client.Balance.ToString("C")</td>
+                <td>
+                    <a href="@Url.Action("ClientDetails", "Home", new { clientId = client.ClientId })" class="btn btn-info">View Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

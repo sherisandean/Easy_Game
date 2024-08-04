@@ -1,0 +1,24 @@
+﻿@model EasyGame.Models.Client
+@{
+    ViewBag.Title = "Add Client";
+}
+<link href="~/Content/sitecss.css" rel="stylesheet" type="text/css" />
+
+<h2>Add Client</h2>
+
+@using (Html.BeginForm("AddClient", "Home", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Balance)
+        @Html.TextBoxFor(model => model.Balance, new { @class = "form-control" })
+    </div>
+
+    <input type="submit" value="Add Client" class="btn btn-primary" />
+}

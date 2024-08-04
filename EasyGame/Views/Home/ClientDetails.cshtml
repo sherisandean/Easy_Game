@@ -1,0 +1,30 @@
+﻿@model EasyGame.ViewModels.ClientDetailsViewModel
+@{
+    ViewBag.Title = "Client Details";
+}
+
+<link href="~/Content/sitecss.css" rel="stylesheet" type="text/css" />
+
+<h2>Client Details</h2>
+
+<h3>@Model.Client.Name</h3>
+<p>Balance: @Model.Client.Balance.ToString("C")</p>
+
+<h4>Transactions</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Amount</th>
+            <th>Comment</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var transaction in Model.Transactions)
+        {
+            <tr>
+                <td>@transaction.Amount.ToString("C")</td>
+                <td>@transaction.Comment</td>
+            </tr>
+        }
+    </tbody>
+</table>

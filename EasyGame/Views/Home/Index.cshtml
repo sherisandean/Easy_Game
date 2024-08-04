@@ -1,0 +1,86 @@
+﻿@model EasyGame.ViewModels.ClientTransactionsViewModel
+@{
+    ViewBag.Title = "Client Transactions";
+}
+<link href="~/Content/sitecss.css" rel="stylesheet" type="text/css" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<div class="one">
+    <h1>Client Transactions</h1>
+</div>
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+{
+    <div>
+        @Html.LabelFor(m => m.SelectedClientId, "Select Client")
+        @Html.DropDownListFor(m => m.SelectedClientId, Model.Clients, "Select a client", new { @class = "form-control" })
+        <input type="submit" value="Get Transactions" class="btn btn-primary" />
+        <a href="@Url.Action("AddClient", "Home")" class="btn btn-success">Add New Client</a>
+        <a href="@Url.Action("ViewAllClients", "Home")" class="btn btn-info">View All Clients</a> <!-- View All Clients button -->
+    </div>
+}
+
+@if (Model.SelectedClientId != 0)
+{
+    <div>
+        <h5>Client Name: @Model.SelectedClientName</h5>
+        <h5>@Model.SelectedClientName Balance: @Model.SelectedClientBalance.ToString("C")</h5>
+        <a href="@Url.Action("AddTransaction", "Home", new { clientId = Model.SelectedClientId })" class="btn btn-success">Add Transaction</a>
+        <h3></h3>
+    </div>
+}
+
+@if (Model.Transactions != null && Model.Transactions.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Transaction ID</th>
+                <th>Amount</th>
+                <th>Transaction Type ID</th>
+                <th>Client ID</th>
+                <th>Comment</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var transaction in Model.Transactions)
+            {
+                <tr>
+                    <td>@transaction.TransactionId</td>
+                    <td>@transaction.Amount</td>
+                    <td>@transaction.TransactionType</td>
+                    <td>@transaction.ClientId</td>
+                    @using (Html.BeginForm("EditComment", "Home", FormMethod.Post))
+                    {
+                        <td>
+                            @Html.Hidden("transactionId", transaction.TransactionId)
+                            @Html.TextBox("Comment", transaction.Comment, new { @class = "form-control" })
+                        </td>
+                        <td><input type="submit" value="Save" class="btn btn-success" /></td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No transactions found for the selected client.</p>
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+        <br />
+        New Balance: @TempData["NewBalance"]
+    </div>
+}
+
+@if (TempData["ClientMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["ClientMessage"]
+    </div>
+}
